@@ -1,49 +1,9 @@
 import { Component, IterableDiffers } from '@angular/core';
 import { TablitasService } from '../../services/tablitas.service';
 import { HttpClient } from '@angular/common/http';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import autoTable, { Table as PDFTable } from 'jspdf-autotable';
-import { saveAs } from 'file-saver';
-import * as XLSX from 'xlsx';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-/* 
-const noBorder = {
-  style: BorderStyle.NONE,
-  size: 0,
-  color: 'FFFFFF',
-};
-const thinBorder = {
-  style: BorderStyle.SINGLE,
-  size: 2,
-  color: '000000',
-};
-const thickBorder = {
-  style: BorderStyle.DOUBLE,
-  size: 4,
-  color: '000000',
-};
-function createTableCell(
-  text: string,
-  borders: {
-    top?: typeof noBorder;
-    bottom?: typeof noBorder;
-    left?: typeof noBorder;
-    right?: typeof noBorder;
-  } = {}
-) {
-  return new TableCell({
-    borders: {
-      top: borders.top ?? thinBorder,
-      bottom: borders.bottom ?? thinBorder,
-      left: borders.left ?? thinBorder,
-      right: borders.right ?? thinBorder,
-    },
-    children: [new Paragraph({ text, alignment: AlignmentType.LEFT })],
-  });
-}
- */
+
 @Component({
   selector: 'app-tablita',
   templateUrl: './tablita.component.html',
