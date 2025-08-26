@@ -1,0 +1,43 @@
+<h1 class="text-center">Component Tablita</h1>
+<div class="container">
+  <div class="row mt-1">
+    <div class="col-lg-4 offset-lg-4">
+      <div class="card text-white bg-secondary mb-3">
+        <div class="card-header text-center">Busqueda de Servicios </div>
+        <div class="card-body text-center">
+
+          <!-- Formulario de búsqueda -->
+          <div class="d-flex flex-row justify-content-around align-self-center">
+            <input type="text" class="form-control m-2" placeholder="Ingrese Item" [(ngModel)]="item">
+            <input type="text" class="form-control m-2" placeholder="Ingrese OS">
+            <input type="text" class="form-control m-2" placeholder="Ingrese Apellidos">
+            <select class="form-control m-2" name="filtro">
+              <option value="0">Filtro 1</option>
+              <option value="1">Filtro 2</option>
+            </select>
+          </div>
+
+          <!-- Botones -->
+          <div class="d-flex flex-row justify-content-around align-self-center">
+            <button type="button" class="btn btn-success btn-lg m-2" (click)="buscar()">Buscar</button>
+            <button class="btn btn-success btn-lg m-2" (click)="descargarExcel()">descargar excel</button>
+            <button class="btn btn-success btn-lg m-2" (click)="generarReportes()">descargar pdf</button>
+          </div>
+
+          <!-- Tabla -->
+          <table class="table table-striped mt-3">
+            <tbody>
+              <tr *ngFor="let contrato of contratos">
+                <td>{{ contrato.ITEM }}</td>
+                <td>{{ contrato.SINAD }}</td>
+                <td>{{ contrato.META }}</td>
+                <td>{{ contrato.Usuario }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
