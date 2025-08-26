@@ -7,19 +7,6 @@ import autoTable, { Table as PDFTable } from 'jspdf-autotable';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import {
-  Document,
-  Packer,
-  Paragraph,
-  TextRun,
-  TableCell,
-  TableRow,
-  Table as DocxTable,
-  AlignmentType,
-  BorderStyle,
-  WidthType,
-} from 'docx';
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 /* 
 const noBorder = {
