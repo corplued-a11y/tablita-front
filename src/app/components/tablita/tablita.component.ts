@@ -3,7 +3,6 @@ import { TablitasService } from '../../services/tablitas.service';
 import { HttpClient } from '@angular/common/http';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-
 @Component({
   selector: 'app-tablita',
   templateUrl: './tablita.component.html',
@@ -34,31 +33,33 @@ export class TablitaComponent {
 
   buscar() {
     if (this.item.trim() !== '') {
-      this.tablitasService.getContrato(this.item).subscribe((data: any[]) => {
-        console.log(data);
-        this.contratos = data;
-        if (this.contratos.length) {
-          //this.cargarPLantillayReemplazar(this.contratos[0]);
-        }
-      });
+      this.tablitasService
+        .getContratoporItem(this.item)
+        .subscribe((data: any[]) => {
+          console.log(data);
+          this.contratos = data;
+          if (this.contratos.length) {
+            //this.cargarPLantillayReemplazar(this.contratos[0]);
+          }
+        });
     } else {
       alert('Ingrese un dato');
     }
   }
   //metodos que generan excel y pdf
-  descargarExcel() {
+  /*   descargarExcel() {
     if (!this.item) return;
     this.tablitasService.generarExcel(this.item).subscribe((blob) => {
       this.descargarArchivo(blob, 'reporte.xlsx');
     });
-  }
+  } */
 
-  descargarPDF() {
+  /*   descargarPDF() {
     if (!this.item) return;
     this.tablitasService.generarPDF(this.item).subscribe((blob) => {
       this.descargarArchivo(blob, 'reporte.pdf');
     });
-  }
+  } */
 
   private descargarArchivo(blob: Blob, nombre: string) {
     const url = window.URL.createObjectURL(blob);
