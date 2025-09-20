@@ -62,7 +62,15 @@
                   "maximumError": "4kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ts"
+                }
+              ],
+              "outputPath": "dist/crud-tablita",
+              "baseHref": "/"
             },
             "development": {
               "optimization": false,

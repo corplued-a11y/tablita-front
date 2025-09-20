@@ -4,8 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "serve:dev": "ng serve --configuration=development",
+    "serve:prod": "ng serve --configuration=production",
+    "build:dev": "ng build --configuration=development",
+    "build:prod": "ng build --configuration=production",
     "test": "ng test",
     "serve:ssr:crud-tablita": "node dist/crud-tablita/server/server.mjs"
   },
