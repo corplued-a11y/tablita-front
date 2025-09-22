@@ -1,0 +1,138 @@
+<p>vacaciones-listado works!</p>
+<h1>este es el listado html</h1>
+<div class="container">
+  <div class="title">
+    <h4>Listado de Productos</h4>
+    <div class="d-flex mb-3">
+      <input type="text" class="form-control me-2" placeholder="Buscar..." [(ngModel)]="item" />
+      <button type="button" class="btn btn-primary" (click)="buscar()">BUSCAR</button>
+    </div>
+
+  </div>
+
+  <!-- Nuevo Card de Información Agrupada -->
+  <div class="card mb-3" *ngIf="showTable" name="resumenDiv">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Información del Trabajador</h5>
+      <button class="btn btn-sm btn-outline-primary" (click)="toggleResumen()">
+        <i class="bi" [ngClass]="isResumenExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        {{ isResumenExpanded ? 'Contraer' : 'Expandir' }}
+      </button>
+    </div>
+
+    <div [ngClass]="{'collapse': !isResumenExpanded, 'show': isResumenExpanded}">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">N° Documento</h6>
+                <p class="card-text">{{ listVacaciones[0]?.Apellidos_y_Nombres }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Dependencia</h6>
+                <p class="card-text">{{ listVacaciones[0]?.Dependencia }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Fecha Inicio Contrato</h6>
+                <p class="card-text">{{ listVacaciones[0]?.Fecha_Inicio_Contrato | date:'dd/MM/yyyy' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla con diseño de card -->
+  <div class="card mb-3" *ngIf="showTable" name="tableDiv">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Listado de Registros</h5>
+      <button class="btn btn-sm btn-outline-primary" (click)="toggleTable()">
+        <i class="bi" [ngClass]="isTableExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        {{ isTableExpanded ? 'Contraer' : 'Expandir' }}
+      </button>
+    </div>
+
+    <div [ngClass]="{'collapse': !isTableExpanded, 'show': isTableExpanded}">
+      <div class="card-body">
+        <table *ngIf="listVacaciones.length > 0" class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Tipo Documento</th>
+              <th scope="col">Fecha Inicio</th>
+              <th scope="col">Estado</th>
+              <th scope="col">SINAD</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listVacaciones" class="table-active">
+              <td>{{ item.ITEM }}</td>
+              <td>{{ item.Tipo_Documento_Identidad }}</td>
+              <td>{{ item.Fecha_Inicio_Contrato | date:'dd/MM/yyyy' }}</td>
+              <td>{{ item.Estado }}</td>
+              <td>{{ item.SINAD }}</td>
+              <td>
+                <button [routerLink]="['/tablita', item.item]" type="button" class="btn btn-info btn-sm">Seleccionar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <h5 *ngIf="listVacaciones.length == 0" class="text-muted">No hay productos para mostrar</h5>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card con botón de expansión -->
+  <div class="card mt-3 mb-3" *ngIf="showCard" name="cardDetalle">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Detalles por año</h5>
+      <button class="btn btn-sm btn-outline-primary" (click)="toggleCard()">
+        <i class="bi" [ngClass]="isCardExpanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+        {{ isCardExpanded ? 'Contraer' : 'Expandir' }}
+      </button>
+    </div>
+
+    <div [ngClass]="{'collapse': !isCardExpanded, 'show': isCardExpanded}">
+      <div class="card-body">
+        <select class="form-select mb-3" [(ngModel)]="selectedYear" (change)="onYearChange()">
+          <option value="">Seleccione un año</option>
+          <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+
+        <div class="row" *ngFor="let detail of selectedDetails">
+          <div class="col-md-3">
+            <p><strong>SINAD:</strong> {{detail.SINAD}}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Fecha Inicio:</strong> {{detail.Fecha_Inicio}}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Fecha Término:</strong> {{detail.Fecha_Termino}}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Días:</strong> {{detail.Numero_Dias}}</p>
+          </div>
+          <div class="col-md-3">
+            <p><strong>Dependencia:</strong> {{detail.Dependencia}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" *ngIf="!selectedDetails || selectedDetails.length === 0">
+        <p>No se encontraron registros para el año seleccionado</p>
+      </div>
+    </div>
+  </div>
+
+
+</div>

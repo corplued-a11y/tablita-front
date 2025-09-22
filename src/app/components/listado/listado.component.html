@@ -1,0 +1,37 @@
+<h1>este es el listado html</h1>
+<div class="container">
+    <div class="title">
+        <h4>Listado de Productos</h4>
+        <div class="d-flex mb-3">
+          <input type="text" class="form-control me-2" placeholder="Buscar..." [(ngModel)]="item" />
+          <button type="button" class="btn btn-primary" (click)="buscar()" >BUSCAR</button>
+        </div>
+        
+    </div>
+
+    <table *ngIf="listTerceros.length > 0" class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">TDR</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Fecha de Inicio</th>
+            <th scope="col">Fecha de Fin</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listTerceros" class="table-active">
+            <td>{{ item.item }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.fec_ini}}</td>
+            <td>{{ item.fec_fin }}</td>
+            <td>
+                <button [routerLink]="['/tablita', item.item]" type="button" class="btn btn-info btn-sm">Seleccionar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h5 *ngIf="listTerceros.length == 0">No hay productos para mostrar</h5>
+</div>

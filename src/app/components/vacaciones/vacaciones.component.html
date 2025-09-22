@@ -1,0 +1,33 @@
+<p>vacaciones works!</p>
+<div class="container">
+  <div class="title">
+    <h4>Listado de Vacaciones</h4>
+    <div class="d-flex mb-3">
+      <input type="text" class="form-control me-2" placeholder="Buscar..." [(ngModel)]="id" />
+      <button type="button" class="btn btn-primary" (click)="buscar()">BUSCAR</button>
+    </div>
+  </div>
+
+  <table class="table table-bordered" *ngIf="listvacacion.length > 0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Fecha de Inicio</th>
+        <th>Fecha de Fin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let vac of listvacacion">
+        <td>{{ vac['N°_Documento'] }}</td>
+        <td>{{ vac['Nombre'] }}</td>
+        <td>{{ vac['Descripcion'] }}</td>
+        <td>{{ vac['Fecha_Inicio'] | date:'shortDate' }}</td>
+        <td>{{ vac['Fecha_Fin'] | date:'shortDate' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="listvacacion.length === 0 && id">No se encontraron resultados</p>
+</div>

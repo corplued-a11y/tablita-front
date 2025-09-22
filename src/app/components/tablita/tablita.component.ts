@@ -1,86 +1,71 @@
-import { Component, IterableDiffers } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TablitasService } from '../../services/tablitas.service';
-import { HttpClient } from '@angular/common/http';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-tablita',
   templateUrl: './tablita.component.html',
-  styleUrl: './tablita.component.css',
+  styleUrls: ['./tablita.component.css'],
 })
-export class TablitaComponent {
-  htmlRenderizado: SafeHtml = '';
+export class TablitaComponent implements OnInit {
+  tercero: any; // aquí guardo el JSON completo
+  visibleData: any; // aquí solo lo que quiero mostrar en la tabla
 
-  item: string = '';
-  contratos: any[] = [];
+  selectedOption: string = '';
+  options = ['TDR', 'OGRH', 'Anexo_09', 'Anexo_14'];
+
   constructor(
-    private tablitasService: TablitasService,
-    private http: HttpClient,
-    private sanitizer: DomSanitizer
+    private route: ActivatedRoute,
+    private _tablitasService: TablitasService
   ) {}
 
-  htmlBase = '';
-  private reemplazarcampos(html: string, datos: any): string {
-    let result = html;
-    for (const key in datos) {
-      if (datos.hasOwnProperty(key)) {
-        const regex = new RegExp(`{{${key}}}`, 'g');
-        result = result.replace(regex, datos[key] ?? '');
-      }
-    }
-    return result;
-  }
-
-  buscar() {
-    if (this.item.trim() !== '') {
-      this.tablitasService
-        .getContratoporItem(this.item)
-        .subscribe((data: any[]) => {
-          console.log(data);
-          this.contratos = data;
-          if (this.contratos.length) {
-            //this.cargarPLantillayReemplazar(this.contratos[0]);
-          }
-        });
-    } else {
-      alert('Ingrese un dato');
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this._tablitasService.getTercerosItem(id).subscribe((data: any) => {
+        this.tercero = data; // 🔹 JSON completo para usar en el botón
+        this.visibleData = {
+          item: data.ITEM,
+          name: data.APELLIDOS_Y_NOMBRES,
+          description: data['DENOMINACIÓN_DE_LA_CONTRATACIÓN'],
+          fec_ini: data.FECHA_DE_INICIO_DE_SERVICIO,
+          fec_fin: data.FECHA_FIN_CONTRATO,
+        };
+      });
     }
   }
-  //metodos que generan excel y pdf
-  /*   descargarExcel() {
-    if (!this.item) return;
-    this.tablitasService.generarExcel(this.item).subscribe((blob) => {
-      this.descargarArchivo(blob, 'reporte.xlsx');
-    });
-  } */
 
-  /*   descargarPDF() {
-    if (!this.item) return;
-    this.tablitasService.generarPDF(this.item).subscribe((blob) => {
-      this.descargarArchivo(blob, 'reporte.pdf');
-    });
-  } */
+  ejecutarMetodo() {
+    console.log('Ejecutando con opción:', this.selectedOption);
 
-  private descargarArchivo(blob: Blob, nombre: string) {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = nombre;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
-
-  generarReportes() {
-    if (this.item.trim() !== '') {
-      this.tablitasService.generarReportes(this.item).subscribe({
-        next: (res) => {
-          alert(res.mensaje); // Mensaje desde backend
+    if (this.selectedOption === 'TDR') {
+      this._tablitasService.getPdfTDR(this.tercero.ITEM).subscribe({
+        next: (blob: Blob) => {
+          // Crear URL del blob y abrir en nueva ventana
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
         },
-        error: (err) => {
-          alert('Error al generar reportes frontend');
-          console.error(err);
+        error: (error) => {
+          console.error('Error al obtener el PDF:', error);
+          // Aquí puedes agregar manejo de errores (por ejemplo, mostrar un mensaje al usuario)
         },
       });
+    }
+    if (this.selectedOption === 'OGRH') {
+      this._tablitasService.getPdfOGRH(this.tercero.ITEM).subscribe({
+        next: (blob: Blob) => {
+          // Crear URL del blob y abrir en nueva ventana
+          const url = window.URL.createObjectURL(blob);
+          window.open(url);
+        },
+        error: (error) => {
+          console.error('Error al obtener el PDF:', error);
+          // Aquí puedes agregar manejo de errores (por ejemplo, mostrar un mensaje al usuario)
+        },
+      });
+    } else {
+      console.log('Usando todo el JSON:', this.tercero);
+      // Aquí el código para las otras opciones
     }
   }
 }
